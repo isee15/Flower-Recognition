@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginEnd="4dp"
+    android:layout_margin="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginEnd="0dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
@@ -13,8 +13,8 @@
     <TextView
         android:id="@+id/section_text"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@android:color/transparent"
+        android:layout_height="24dp"
+        android:background="@color/cardview_shadow_start_color"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:singleLine="true"

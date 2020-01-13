@@ -5,23 +5,22 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.demo.flowerrecognition.R
-import com.demo.flowerrecognition.adapter.RecyclerAdapter
-import com.demo.flowerrecognition.adapter.SimpleSectionedRecyclerViewAdapter
+import com.demo.flowerrecognition.adapter.FlowerSearchListAdapter
 import com.demo.flowerrecognition.model.FlowerDataSource
 import com.demo.flowerrecognition.model.FlowerItem
 import com.demo.flowerrecognition.view.AZSideBarView
 import kotlinx.android.synthetic.main.activity_search_list.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SearchListActivity : BaseActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var adapter: RecyclerAdapter
-    private lateinit var sectionAdapter: SimpleSectionedRecyclerViewAdapter
+    private lateinit var tableViewAdapter: FlowerSearchListAdapter
     var items: MutableList<FlowerItem> = ArrayList()
-    var search_list: MutableList<FlowerItem> = ArrayList()
-    private lateinit var sectionArray: Array<SimpleSectionedRecyclerViewAdapter.Section>
+    var searchList: MutableList<FlowerItem> = ArrayList()
+    private var sectionItemData: MutableList<Pair<String, MutableList<FlowerItem>>> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,21 +40,14 @@ class SearchListActivity : BaseActivity() {
         val sortedList =
             photosList.sortedWith(compareBy { it.getPinyin() })
         items.addAll(sortedList)
-        search_list.addAll(sortedList)
+        searchList.addAll(sortedList)
 
-        adapter = RecyclerAdapter(this, search_list)
 
-        sectionAdapter =
-            SimpleSectionedRecyclerViewAdapter(
-                this,
-                R.layout.section,
-                R.id.section_text,
-                this.adapter as RecyclerView.Adapter<RecyclerView.ViewHolder>
-            )
         resetSection()
-
+        tableViewAdapter = FlowerSearchListAdapter(this, sectionItemData)
         //Apply this adapter to the RecyclerView
-        recyclerView.adapter = sectionAdapter
+        recyclerView.adapter = tableViewAdapter
+
 
 
         searchView.setOnQueryTextListener(object :
@@ -69,21 +61,21 @@ class SearchListActivity : BaseActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText!!.isNotEmpty()) {
-                    search_list.clear()
-                    val searchText = newText.toLowerCase()
+                    searchList.clear()
+                    val searchText = newText.toLowerCase(Locale.getDefault())
                     items.forEach {
                         if (it.getPinyin()?.contains(searchText)!!
                             || it.nameCh.contains(searchText)
                             || it.nameEn.contains(searchText)
                         ) {
-                            search_list.add(it)
+                            searchList.add(it)
                         }
                     }
                     resetSection()
                     recyclerView.adapter!!.notifyDataSetChanged()
                 } else {
-                    search_list.clear()
-                    search_list.addAll(items)
+                    searchList.clear()
+                    searchList.addAll(items)
                     resetSection()
                     recyclerView.adapter!!.notifyDataSetChanged()
                 }
@@ -96,44 +88,46 @@ class SearchListActivity : BaseActivity() {
     fun resetSection() {
 
         //This is the code to provide a sectioned list
-        val sections: MutableList<SimpleSectionedRecyclerViewAdapter.Section> =
-            ArrayList()
+        val sections: MutableList<Pair<String, MutableList<FlowerItem>>> =
+            mutableListOf()
 
         var lastAlpha = ""
-        var firstPosition: Int
-        val letters: MutableList<String> = ArrayList()
-        for ((index, value) in search_list.withIndex()) {
+        var curItems: MutableList<FlowerItem> = mutableListOf()
+        val letters: MutableList<String> = mutableListOf()
+        for (value in searchList) {
             if (lastAlpha != value.getPinyin()?.first().toString()) {
+                if (curItems.size > 0) {
+                    sections.add(Pair(lastAlpha, curItems))
+                }
                 lastAlpha = value.getPinyin()?.first().toString()
-                letters.add(lastAlpha.toUpperCase());
-                firstPosition = index
-                //Sections
-                sections.add(
-                    SimpleSectionedRecyclerViewAdapter.Section(
-                        firstPosition,
-                        lastAlpha.toUpperCase()
-                    )
-                )
+                letters.add(lastAlpha.toUpperCase(Locale.getDefault()))
+                curItems = mutableListOf()
             }
+            curItems.add(value)
         }
+        if (curItems.size > 0) {
+            sections.add(Pair(lastAlpha, curItems))
+        }
+        sectionItemData.clear()
+        sectionItemData.addAll(sections)
 
-        sectionArray = sections.toTypedArray()
-        sectionAdapter.setSections(sectionArray)
 
         barList.setLetters(letters)
         barList.setOnLetterChangeListener(object : AZSideBarView.OnLetterChangeListener {
             override fun onLetterChange(letter: String?) {
-                for (value in sectionArray) {
-                    if (letter.equals(value.title.toString(), ignoreCase = true)) {
-                        linearLayoutManager.scrollToPositionWithOffset(value.sectionedPosition,0)
+                var offset = 0
+                for (value in sectionItemData) {
+                    if (letter.equals(value.first, ignoreCase = true)) {
+                        linearLayoutManager.scrollToPositionWithOffset(offset, 0)
 //                        recyclerView.layoutManager?.scrollToPosition(value.sectionedPosition)
                         return
                     }
+                    offset += value.second.size + 1
                 }
             }
         })
-
     }
+
 
 //    companion object {
 //        class LoadAssetsTask internal constructor(private val context: SearchListActivity) :

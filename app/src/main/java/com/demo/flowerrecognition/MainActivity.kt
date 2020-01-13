@@ -19,6 +19,7 @@ import com.demo.flowerrecognition.activity.BaseActivity
 import com.demo.flowerrecognition.activity.RecogResultActivity
 import com.demo.flowerrecognition.activity.SearchListActivity
 import com.demo.flowerrecognition.activity.SettingActivity
+import com.demo.flowerrecognition.debug.PermissionListActivity
 import com.demo.flowerrecognition.photo.AlbumPhotoUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -111,7 +112,8 @@ class MainActivity : BaseActivity() {
 
 
         btnSetting.setOnClickListener {
-            val intent = Intent(this@MainActivity, SettingActivity::class.java)
+            val intent = Intent(this@MainActivity, PermissionListActivity::class.java)
+//            val intent = Intent(this@MainActivity, SettingActivity::class.java)
             startActivity(intent)
         }
     }

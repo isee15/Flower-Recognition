@@ -23,5 +23,5 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textSize="20sp"
-        tools:text="Screen Title" />
+        tools:text="--" />
 </RelativeLayout>

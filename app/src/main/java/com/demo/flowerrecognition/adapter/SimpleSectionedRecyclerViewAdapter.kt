@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import java.util.*
 
@@ -63,7 +62,8 @@ class SimpleSectionedRecyclerViewAdapter(
 
     fun setSections(sections: Array<Section>) {
         mSections.clear()
-        Arrays.sort(sections
+        Arrays.sort(
+            sections
         ) { o, o1 -> if (o.firstPosition == o1.firstPosition) 0 else if (o.firstPosition < o1.firstPosition) -1 else 1 }
         for ((offset, section) in sections.withIndex()) {
             section.sectionedPosition = section.firstPosition + offset
