@@ -9,7 +9,7 @@
 
 这可能是一个PR项目，一直没有android版本。
 
-最近换android手机，正好用kotlin实现一下。代码整理后再提交。
+最近换android手机，正好用kotlin实现一下。
 
 ## 下载地址
 
