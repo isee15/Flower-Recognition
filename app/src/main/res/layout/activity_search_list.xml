@@ -45,6 +45,19 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
+            <TextView
+                android:id="@+id/floatSectionTv"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/cardview_shadow_start_color"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="@id/recyclerView" />
+
             <com.demo.flowerrecognition.view.AZSideBarView
                 android:id="@+id/barList"
                 android:layout_width="40dp"

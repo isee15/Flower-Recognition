@@ -2,6 +2,7 @@ package com.demo.flowerrecognition.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +21,8 @@ class SearchListActivity : BaseActivity() {
     private lateinit var tableViewAdapter: FlowerSearchListAdapter
     var items: MutableList<FlowerItem> = ArrayList()
     var searchList: MutableList<FlowerItem> = ArrayList()
-    private var sectionItemData: MutableList<Pair<String, MutableList<FlowerItem>>> = mutableListOf()
+    private var sectionItemData: MutableList<Pair<String, MutableList<FlowerItem>>> =
+        mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,16 @@ class SearchListActivity : BaseActivity() {
         recyclerView.adapter = tableViewAdapter
 
 
+        recyclerView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            val pos = linearLayoutManager.findFirstVisibleItemPosition()
+            if (pos > 0) {
+                val (type, section, row) = tableViewAdapter.positionToSection(pos)
+                floatSectionTv.visibility = View.VISIBLE
+                floatSectionTv.text = sectionItemData[section].first
+            } else {
+                floatSectionTv.visibility = View.GONE
+            }
+        }
 
         searchView.setOnQueryTextListener(object :
             OnQueryTextListener {

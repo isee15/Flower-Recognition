@@ -35,7 +35,7 @@ abstract class TableViewAdapter :
         return count
     }
 
-    private fun positionToSection(position: Int): Triple<Int, Int, Int> {
+    fun positionToSection(position: Int): Triple<Int, Int, Int> {
         var offset = position
         for (i in 0 until numberOfSections()) {
             val rows = numberInSection(i) + 1
