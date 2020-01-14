@@ -50,4 +50,9 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.0.1'
 
+    // debugImplementation because LeakCanary should only run in debug builds.
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
+
+    implementation 'com.instabug.library:instabug:9.0.4'
+
 }

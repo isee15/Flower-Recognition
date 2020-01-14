@@ -48,7 +48,7 @@
             <TextView
                 android:id="@+id/floatSectionTv"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="24dp"
                 android:background="@color/cardview_shadow_start_color"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"

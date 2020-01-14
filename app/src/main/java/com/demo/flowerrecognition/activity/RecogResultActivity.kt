@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_recog_result.*
 import kotlinx.coroutines.*
 import java.io.*
 
+
 interface CNNListener {
     fun onTaskCompleted(result: FloatArray?, isFlower: Boolean)
 }
@@ -69,6 +70,8 @@ class RecogResultActivity : BaseActivity(), CNNListener {
         bottomResultView.visibility = GONE
 
         cnnRecognitionAsync(this, caffeMobile, false, pictureUri.path!!)
+
+
     }
 
     private fun cnnRecognitionAsync(
